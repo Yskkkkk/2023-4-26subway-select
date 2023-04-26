@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <el-form :inline="true" :model="lix" class="demo-form-inline">
+        <el-form-item label="地铁起点">
+            <el-input v-model="lix.qidian" placeholder="起点"></el-input>
+        </el-form-item>
+
+        <!-- <el-form-item label="地铁车次">
+             <el-input v-model="ditie.cid" placeholder="地铁车次"></el-input>
+         </el-form-item>-->
+        <el-form-item label="地铁终点">
+            <el-input v-model="lix.zdain" placeholder="终点"></el-input>
+        </el-form-item>
+        <!--<el-form-item label="地铁换乘信息">
+            <el-input v-model="ditie.cid" placeholder="地铁换乘信息"></el-input>
+        </el-form-item>-->
+        <el-form-item>
+            <el-button type="primary" @click="ceshi">查询</el-button>
+        </el-form-item>
+
+    </el-form>
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+
+
+
+            <el-table-column
+                    prop="zhandian1"
+                    label="地铁站点"
+                    align="center"
+            >
+            </el-table-column>
+        </el-table>
+    </template>
+</div>
+</body>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+<script src="js/axios-0.18.0.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+
+        mounted(){
+            //当页面加载完成后，发送异步请求，获取数据
+
+            this.ceshi();
+        },
+
+        methods: {
+            ceshi(){
+                var _this=this;
+                axios({
+                    method:"post",
+                    /* url:"http://localhost:8080/ditie/ditie/all"*/
+                    url:"http://localhost:8080/ditie/ditie/ceshi",
+                    data:_this.lix
+                }).then(function (resp) {
+                    //添加成功
+                    //关闭窗口
+                    // 重新查询数据
+                    /*  _this.selectAll();*/
+                    _this.tableData=resp.data;
+                })
+            }
+        },
+        data() {
+            return {
+                lix:{
+                    qidian:'',
+                    zdain:''
+                },
+                tableData: [{
+                    zhandian1: ''
+                }, {
+                    zhandian1: ''
+                }]
+            }
+        }
+    })
+</script>
+</html>
